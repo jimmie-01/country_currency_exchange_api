@@ -1,0 +1,25 @@
+{
+  "name": "country_currency_exchange_api",
+  "version": "1.0.0",
+  "description": "Lightweight REST API for looking up and converting exchange rates between countries/currencies using Node.js, Express and SQL (PostgreSQL). Designed for easy local development, CI testing, and production deployment.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jimmie-01/country_currency_exchange_api/issues"
+  },
+  "homepage": "https://github.com/jimmie-01/country_currency_exchange_api#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
