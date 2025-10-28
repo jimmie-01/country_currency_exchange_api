@@ -2,6 +2,7 @@ import Country from '../models/country.schema.js';
 import { refreshAll } from '../services/fetchApi.service.js';
 import { generateSummaryImage, OUT_PATH } from '../services/image.service.js';
 import fs from 'fs';
+import { Op } from 'sequelize';
 
 // POST /countries/refresh
 const refresh = async (req, res) => {
@@ -64,7 +65,7 @@ const getOne = async (req, res) => {
 	try {
       const name = req.params.name;
       const country = await Country.findOne({
-        where: { name: { [require('sequelize').Op.iLike || require('sequelize').Op.like]: name } } // fallback
+        where: { name: { [Op.like]: name } } // fallback
       });
 
       // better to do case-insensitive

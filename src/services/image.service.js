@@ -2,6 +2,7 @@ import { Jimp } from 'jimp';
 import fs from 'fs';
 import path from 'path';
 import Country from '../models/country.schema.js';
+import { Op } from 'sequelize';
 
 const CACHE_DIR = path.join(process.cwd(), 'cache');
 export const OUT_PATH = path.join(CACHE_DIR, 'summary.png');
@@ -12,7 +13,7 @@ export const generateSummaryImage = async () => {
   // gather stats
   const total = await Country.count();
   const top5 = await Country.findAll({
-    where: { estimated_gdp: { [require('sequelize').Op.not]: null } },
+    where: { estimated_gdp: { [Op.not]: null } },
     order: [['estimated_gdp', 'DESC']],
     limit: 5
   });

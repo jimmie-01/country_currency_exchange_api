@@ -111,9 +111,9 @@ export const refreshAll = async () => {
       };
 
       if (existing) {
-        await existing.update(payload, { transaction: t });
+        await existing.update(payload, { transaction: transact });
       } else {
-        await Country.create(payload, { transaction: t });
+        await Country.create(payload, { transaction: transact });
       }
     }
 
