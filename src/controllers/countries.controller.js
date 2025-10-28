@@ -1,6 +1,7 @@
 import Country from '../models/country.schema.js';
 import { refreshAll } from '../services/fetchApi.service.js';
 import { generateSummaryImage, OUT_PATH } from '../services/image.service.js';
+import path from 'path';
 import fs from 'fs';
 import { Op } from 'sequelize';
 
@@ -100,10 +101,11 @@ const getOne = async (req, res) => {
 const image = async (req, res) => {
 	try {
       const pth = OUT_PATH;
+	  console.log(pth);
       if (!fs.existsSync(pth)) {
         return res.status(404).json({ error: 'Summary image not found' });
       }
-      return res.sendFile(pth);
+      return res.sendFile(path.resolve(pth));
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });

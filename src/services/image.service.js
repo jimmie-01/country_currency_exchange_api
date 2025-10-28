@@ -4,7 +4,7 @@ import path from 'path';
 import Country from '../models/country.schema.js';
 import { Op } from 'sequelize';
 
-const CACHE_DIR = path.join(process.cwd(), 'cache');
+const CACHE_DIR = path.join(import.meta.dirname, '../cache');
 export const OUT_PATH = path.join(CACHE_DIR, 'summary.png');
 
 export const generateSummaryImage = async () => {
@@ -23,7 +23,7 @@ export const generateSummaryImage = async () => {
   // Create simple image
   const width = 1000;
   const height = 600;
-  const image = new Jimp(width, height, 0xffffffff); // white background
+  const image = new Jimp({ width, height, color: 0xffffffff }); // white background
 
   // load a font
   const fontTitle = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
@@ -50,5 +50,6 @@ export const generateSummaryImage = async () => {
   }
 
   await image.writeAsync(OUT_PATH);
+  console.log('Image written to:', OUT_PATH, fs.existsSync(OUT_PATH));
   return OUT_PATH;
 }
