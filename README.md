@@ -1,63 +1,45 @@
-# Country Currency Exchange API
+# Country Currency & Exchange API
 
-Lightweight REST API for looking up and converting exchange rates between countries/currencies using Node.js, Express and SQL (PostgreSQL). Designed for easy local development, CI testing, and production deployment.
+Fetches country data and exchange rates, computes estimated GDP, caches in MySQL, and exposes CRUD + status + summary image endpoints.
 
 ## Features
-- Query available currencies
-- Query exchange rates (base → target)
-- Convert amounts between currencies
-- CRUD for currency and rate data (for trusted/admin clients)
-- SQL-first schema with migrations and seed data
-- Clear JSON responses and error codes
+- `POST /countries/refresh` — fetch countries & exchange rates and cache them
+- `GET /countries` — list cached countries with optional `region`, `currency` and `sort=gdp_desc`
+- `GET /countries/:name` — fetch a single country by name (case-insensitive)
+- `DELETE /countries/:name` — delete a country record
+- `GET /status` — total countries & last refresh timestamp
+- `GET /countries/image` — serves summary image generated on refresh
 
-## Tech stack
-- Node.js (LTS)
-- Express
-- SQL
+## Requirements
+- Node.js 18+
+- MySQL server
+- npm
 
-## Prerequisites
-- Node.js >= 18
-- PostgreSQL >= 12 (or a Docker environment)
-- npm or yarn
+## Setup
 
-## Quickstart (development)
-1. Clone project
-2. Install deps:
-	- npm install
-3. Create .env from template (see below)
-4. Run DB (locally or docker)
-5. Run migrations and seeds
-	- npm run migrate
-	- npm run seed
-6. Start server:
-	- npm run dev
-7. API served at http://localhost:3000 (default)
-
-## .env example
-NODE_ENV=development
-PORT=3000
-DATABASE_URL=postgres://user:password@localhost:5432/exchange_db
-
-## Database schema (recommended)
-SQL example (Postgres):
-
-```sql
-CREATE TABLE currencies (
-  id SERIAL PRIMARY KEY,
-  code VARCHAR(3) NOT NULL UNIQUE, -- ISO 4217 e.g. USD, EUR
-  name TEXT NOT NULL,
-  symbol TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE exchange_rates (
-  id SERIAL PRIMARY KEY,
-  base_currency_id INTEGER NOT NULL REFERENCES currencies(id) ON DELETE CASCADE,
-  target_currency_id INTEGER NOT NULL REFERENCES currencies(id) ON DELETE CASCADE,
-  rate NUMERIC(24,12) NOT NULL CHECK (rate > 0),
-  source TEXT, -- optional source identifier
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  UNIQUE (base_currency_id, target_currency_id)
-);
+1. Clone repo
+```bash
+$ git clone https://github.com/jimmie-01/country_currency_exchange_api.git
 ```
+2. Change Directory into:
+```sh 
+$ cd country-currency-exchange-api
+```
+3. Install
+```sh
+$ npm install
+```
+4. Create MYSQL Database
+```sh
+$ CREATE DATABASE country_cache CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+5. Copy the follow into .env
+```sh
+$ DB_HOST=localhost
+$ DB_PORT=3306
+$ DB_USER=root
+$ DB_PASS=your_password
+$ DB_NAME=country_cache
+$ PORT=3000
+```
+
